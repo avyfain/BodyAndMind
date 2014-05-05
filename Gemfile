@@ -3,11 +3,15 @@ ruby '2.0.0'
 #ruby-gemset=railstutorial_rails_4_0
 
 gem 'rails', '4.0.4'
+gem 'bootstrap_form'
+gem 'friendly_id', '~> 5.0.0'
 
 group :development do
   gem 'sqlite3', '1.3.8'
 end
 
+gem 'protected_attributes'
+gem 'fastclick-rails', '~> 0.0.1'
 gem 'sass-rails', '4.0.1'
 gem 'uglifier', '2.1.1'
 gem 'coffee-rails', '4.0.1'
