@@ -11,11 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140505022202) do
+ActiveRecord::Schema.define(version: 20140505022709) do
 
   create_table "reports", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "sleep"
+    t.datetime "wake"
+    t.integer  "excercise"
+    t.integer  "energy"
+    t.string   "mood"
+    t.float    "weight"
+    t.integer  "stress"
+    t.string   "weather"
+    t.integer  "temperature"
+    t.string   "geolocation"
   end
 
 end
