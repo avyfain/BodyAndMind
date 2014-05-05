@@ -1,6 +1,9 @@
 BodyAndMind::Application.routes.draw do
   resources :reports
 
+  root to: 'pages#index'
+  
+  match '/new_report', to: 'reports#new', via: 'get'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
