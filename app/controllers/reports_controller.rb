@@ -25,15 +25,12 @@ class ReportsController < ApplicationController
   # POST /reports.json
   def create
     @report = Report.new(report_params)
-
-    respond_to do |format|
-      if @report.save
-        format.html { redirect_to @report, notice: 'Report was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @report }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
-      end
+    @report.excercise = (report_params['excercise'] == "Yes" ? 1 : 0)
+    if @report.save
+      redirect_to reports_path
+    else
+      flash[:error] = "Something went wrong."
+      render 'new'
     end
   end
 
@@ -69,6 +66,7 @@ class ReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
-      params[:report]
+      params.require(:report).permit(:sleep, :wake, :excercise, :energy, :mood, :weight, :stress, :weather, :temperature, :geolocation)
     end
+
 end

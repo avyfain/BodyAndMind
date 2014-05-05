@@ -1,25 +1,42 @@
 <h1>Listing reports</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @reports.each do |report| %>
+<div class= "well">
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= link_to 'Show', report %></td>
-        <td><%= link_to 'Edit', edit_report_path(report) %></td>
-        <td><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Date</th>
+        <th>Sleep Time</th>
+        <th>Wake Time</th>
+        <th>Exercise</th>
+        <th>Energy Level</th>
+        <th>Mood</th>
+        <th>Weight</th>
+        <th>Stress</th>
+        <th>Weather</th>
+        <th>Temp.</th>
+        <th>Location</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
+    <tbody>
+      <% @reports.each do |r| %>
+        <tr>
+          <td><%= r.created_at.localtime.strftime("%Y-%m-%d") %></td>
+          <td><%= r.sleep.localtime.strftime("%I:%M %p") %></td>
+          <td><%= r.wake.localtime.strftime("%I:%M %p") %></td>
+          <td><%= r.excercise %></td>
+          <td><%= r.energy %></td>
+          <td><%= r.mood %></td>
+          <td><%= r.weight %></td>
+          <td><%= r.stress %></td>
+          <td><%= r.weather %></td>
+          <td><%= r.temperature %></td>
+          <td><%= r.geolocation  %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 <br>
 
 <%= link_to 'New Report', new_report_path %>
