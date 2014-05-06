@@ -21,7 +21,7 @@
       <%= f.time_field :sleep, label: "When did you go to sleep yesterday?" %>
       <%= f.time_field :wake, label: "When did you wake up today?" %>
       <%= f.number_field :weight, label: "Weight (lbs):", placeholder: "180" %>
-      <%= f.select :excercise, options_for_select(["Yes", "No"]) %>
+      <%= f.select :excercise, options_for_select(["Yes", "No"]), label: "Exercise" %>
       <%= f.select :energy, options_for_select(["1 - Very Tired", "2", "3", "4", "5", "6", "7", "8", "9", "10 - Very Energetic"]) %>
       <%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
     <%= f.select :stress, options_for_select(["1 - Very Relaxed", "2", "3", "4", "5", "6", "7", "8", "9", "10 - Very Stressed"]) %>
