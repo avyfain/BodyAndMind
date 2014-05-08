@@ -1,6 +1,7 @@
-<h1>Listing reports</h1>
+<script src="http://mbostock.github.com/d3/d3.v2.js"></script>
+<!-- <h1>Listing reports</h1> -->
 
-<div class= "well">
+<!-- <div class= "well">
   <table class="table">
     <thead>
       <tr>
@@ -36,7 +37,92 @@
       <% end %>
     </tbody>
   </table>
+</div> -->
+<br>
+<div class="row">
+  <div class="well col-md-3 col-md-offset-5 well">
+    <h2 style="text-align: center ">Your Diary</h2>
+    <hr>
+    
+    <h4>Sleep</h4>
+    <div class="graph-wrapper">
+      <span class="report-graph" id="sleep-graph"></span>
+    </div>
+
+    <h4>Energy</h4>
+    <div class="graph-wrapper">
+      <span class="report-graph" id="energy-graph"></span>
+    </div>
+
+    <h4>Stress</h4>
+    <div class="graph-wrapper">
+      <span class="report-graph" id="stress-graph"></span>
+    </div>
+  
+  </div>
 </div>
 <br>
 
-<%= link_to 'New Report', new_report_path %>
+<div class="row">
+  <%= link_to 'New Report', new_report_path %>
+</div>
+
+<script type="text/javascript">
+function displayGraph(id, width, height) {
+    var graph = d3.select(id).append("svg:svg").attr("width", "100%").attr("height", "100%");
+    
+    var dataset = [];
+        var arrayMax = 7;
+        var limit = 100;
+        var total = 0;
+        for (var i = 0; i <= arrayMax; i++) {
+          var val = 5 + Math.floor(Math.random()*limit);
+          dataset.push(val);
+          total = total +val;
+        }
+    
+    var x = d3.scale.linear().domain([0, 7]).range([-5, width]);
+    var y = d3.scale.linear().domain([0, 100]).range([0, height]);
+    var line = d3.svg.line()
+      .x(function(d,i) { 
+        return x(i); 
+      })
+      .y(function(d) { 
+        return y(d); 
+      })
+      .interpolate("basis")
+            
+      graph.append("svg:path").attr("d", line(dataset));
+    }
+
+    // displayGraph("#energy-graph", 200, 70);
+
+    var charts = ["#sleep-graph","#energy-graph", "#stress-graph"];
+    var arrayLength = charts.length;
+    for (var i = 0; i < arrayLength; i++) {
+        displayGraph(charts[i], 200, 70);
+    }
+      
+</script>
+
+
+<style>
+  .graph-wrapper {
+    width: 200px;
+    margin: 20px auto;
+    border-left: 1px solid #C0C0C0;
+    border-right: 1px solid #C0C0C0;
+  }
+  .report-graph {
+    height: 60px;
+    width:100%;
+    margin: 0 auto;
+  }
+
+  .report-graph path {
+     stroke: #1b70e0;
+     stroke-width: 2;
+     fill: none;
+  }
+
+</style>
