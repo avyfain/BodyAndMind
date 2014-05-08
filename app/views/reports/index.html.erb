@@ -93,11 +93,10 @@ function displayGraph(id, width, height) {
       .interpolate("basis")
             
       graph.append("svg:path").attr("d", line(dataset));
+
     }
 
-    // displayGraph("#energy-graph", 200, 70);
-
-    var charts = ["#sleep-graph","#energy-graph", "#stress-graph"];
+    var charts = ["#sleep-graph","#energy-graph", "#stress-graph"];    
     var arrayLength = charts.length;
     for (var i = 0; i < arrayLength; i++) {
         displayGraph(charts[i], 200, 70);
@@ -123,6 +122,16 @@ function displayGraph(id, width, height) {
      stroke: #1b70e0;
      stroke-width: 2;
      fill: none;
+  }
+
+  #stress-graph path {
+    stroke: #FF8F65;
+  }
+  #sleep-graph  path{
+    stroke: #FFD865;
+  }
+  #energy-graph path {
+    stroke: #6FC3FF;
   }
 
 </style>
