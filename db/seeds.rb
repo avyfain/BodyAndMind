@@ -25,4 +25,3 @@
     @report.update_attribute :updated_at, @date
 end
 
-
