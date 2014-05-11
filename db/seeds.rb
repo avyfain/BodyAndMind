@@ -10,8 +10,8 @@
     @r = lambda{rand(1..10)}
     @moods = ["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"]
     @report = Report.create!(
-      sleep: @r[],
-      wake: @r[],
+      sleep: @date,
+      wake: @date + @r[].hour,
       excercise: @r[],
       energy: @r[],
       mood:@moods.sample,
