@@ -1,25 +1,15 @@
 <script src="http://mbostock.github.com/d3/d3.v2.js"></script>
 <br>
+
 <div class="row">
   <div class="well col-md-3 col-md-offset-5 well">
     <h2 style="text-align: center ">Your Diary</h2>
     <hr>
     
-    <h4>Sleep</h4>
+    <h4>Sleep, Energy, and Stress</h4>
     <div class="graph-wrapper">
-      <span class="report-graph" id="sleep-graph"></span>
+      <span class="report-graph" id="multi-graph"></span>
     </div>
-
-    <h4>Energy</h4>
-    <div class="graph-wrapper">
-      <span class="report-graph" id="energy-graph"></span>
-    </div>
-
-    <h4>Stress</h4>
-    <div class="graph-wrapper">
-      <span class="report-graph" id="stress-graph"></span>
-    </div>
-  
   </div>
 </div>
 <br>
@@ -27,23 +17,24 @@
 <div class="row">
   <%= link_to 'New Report', new_report_path %>
 </div>
-
+<%= content_tag :div, :hidden, id: "entries", data: {entries: Report.order("created_at").last(limit=7).to_a.map{ |r| r.to_hash}.to_json } 
+ -%>
 <script type="text/javascript">
-function displayGraph(id, width, height) {
+  var dataset = $(entries).data()["entries"];
+  var sleepDataSet = dataset.map(function(dp){return dp.sleep;});
+  var energyDataSet = dataset.map(function(dp){return dp.energy;});
+  var stressDataSet = dataset.map(function(dp){return dp.stress;});
+  console.log("datasets");
+  console.log(dataset);
+  console.log(sleepDataSet);
+  console.log(stressDataSet);
+  console.log(energyDataSet);
+
+  function displayGraph(id, width, height) {
     var graph = d3.select(id).append("svg:svg").attr("width", "100%").attr("height", "100%");
     
-    var dataset = [];
-        var arrayMax = 7;
-        var limit = 100;
-        var total = 0;
-        for (var i = 0; i <= arrayMax; i++) {
-          var val = 5 + Math.floor(Math.random()*limit);
-          dataset.push(val);
-          total = total +val;
-        }
-    
     var x = d3.scale.linear().domain([0, 7]).range([-5, width]);
-    var y = d3.scale.linear().domain([0, 100]).range([0, height]);
+    var y = d3.scale.linear().domain([0, 10]).range([0, height]);
     var line = d3.svg.line()
       .x(function(d,i) { 
         return x(i); 
@@ -53,15 +44,14 @@ function displayGraph(id, width, height) {
       })
       .interpolate("basis")
             
-      graph.append("svg:path").attr("d", line(dataset));
+      graph.append("svg:path").attr("d", line(sleepDataSet));
+      graph.append("svg:path").attr("d", line(stressDataSet));
+      graph.append("svg:path").attr("d", line(energyDataSet));
 
     }
 
-    var charts = ["#sleep-graph","#energy-graph", "#stress-graph"];    
-    var arrayLength = charts.length;
-    for (var i = 0; i < arrayLength; i++) {
-        displayGraph(charts[i], 200, 70);
-    }
+    var chart = "#multi-graph";
+    displayGraph(chart, 200, 70);
       
 </script>
 
@@ -85,14 +75,8 @@ function displayGraph(id, width, height) {
      fill: none;
   }
 
-  #stress-graph path {
-    stroke: #FF8F65;
-  }
-  #sleep-graph  path{
+  #multi-graph  path{
     stroke: #FFD865;
-  }
-  #energy-graph path {
-    stroke: #6FC3FF;
   }
 
 </style>
