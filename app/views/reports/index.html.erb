@@ -1,98 +1,202 @@
-<script src="http://mbostock.github.com/d3/d3.v2.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <br>
 <div class="row">
-  <div class="well col-md-3 col-md-offset-5 well">
+  <div class="well col-md-4 col-md-offset-4 well">
     <h2 style="text-align: center ">Your Diary</h2>
     <hr>
     
-    <h4>Sleep</h4>
     <div class="graph-wrapper">
-      <span class="report-graph" id="sleep-graph"></span>
+      <span class="report-graph" id="line-graph"></span>
     </div>
+    
+    <div class="graph-wrapper">
+      <span class="report-graph" id="mood-graph"></span>
+    </div> 
 
-    <h4>Energy</h4>
-    <div class="graph-wrapper">
-      <span class="report-graph" id="energy-graph"></span>
-    </div>
-
-    <h4>Stress</h4>
-    <div class="graph-wrapper">
-      <span class="report-graph" id="stress-graph"></span>
-    </div>
-  
   </div>
 </div>
 <br>
 
-<div class="row">
-  <%= link_to 'New Report', new_report_path %>
-</div>
-
 <script type="text/javascript">
-function displayGraph(id, width, height) {
-    var graph = d3.select(id).append("svg:svg").attr("width", "100%").attr("height", "100%");
-    
-    var dataset = [];
-        var arrayMax = 7;
-        var limit = 100;
-        var total = 0;
-        for (var i = 0; i <= arrayMax; i++) {
-          var val = 5 + Math.floor(Math.random()*limit);
-          dataset.push(val);
-          total = total +val;
-        }
-    
-    var x = d3.scale.linear().domain([0, 7]).range([-5, width]);
-    var y = d3.scale.linear().domain([0, 100]).range([0, height]);
-    var line = d3.svg.line()
-      .x(function(d,i) { 
-        return x(i); 
-      })
-      .y(function(d) { 
-        return y(d); 
-      })
-      .interpolate("basis")
-            
-      graph.append("svg:path").attr("d", line(dataset));
 
+  // margins
+  var margin = {top: 20, right: 40, bottom: 100, left: 30};
+  var w = 350 - margin.left - margin.right;
+  var h = 350 - margin.top - margin.bottom;
+
+  //Width and height
+  var barPadding = 0;
+  
+  var dataset = [0,1,0,1,0,1,0];
+  
+  //Create SVG element
+  var svg = d3.select("#line-graph")
+    .append("svg")
+    .attr("width", w + margin.left + margin.right)
+    .attr("height", h + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");        
+
+  var x = d3.scale.linear()
+                  .range([0, w])
+                  .domain([0, 7])
+                  .nice();
+
+  var y = d3.scale.linear()
+                  .range([h, 0])
+                  .domain([0,10])
+                  .nice();
+
+
+  var y_weight = d3.scale.linear()
+                  .range([h, 0])
+                  .domain([100,300])
+                  .nice();
+
+
+  var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .ticks(6)
+                    .tickPadding(w/14)
+                    .tickValues([0,1,2,3,4,5,6])
+                    .tickFormat(function(d) {return "May " + (parseInt(d) +10)});
+
+  var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left"); 
+
+  var weightAxis = d3.svg.axis()
+                    .scale(y_weight)
+                    .orient("right");                                        
+
+  var line = d3.svg.line()
+                    .x(function(d,i) { return x(i); })
+                    .y(function(d) { return y(d); })
+                    .interpolate("monotone");
+                    // .tension(0); 
+
+  svg.selectAll("rect")
+       .data(dataset)
+       .enter()
+       .append("rect")
+       .attr("x", function(d, i) {
+          return  i * (w / dataset  .length);
+       })
+       .attr("y", function(d) {
+          return 0;
+       })
+       .attr("width", w / dataset.length - barPadding)
+       .attr("height", h)
+       .style("fill", function(d) {
+          if (d==1) {
+            return "rgba(255,0,0,.15)"
+          } else {
+            return "rgba(0,255,0,.15)"
+          }
+       });
+
+  function addLine(data, color) {
+    svg.append("svg:path")
+      .attr("class", "line")
+      .attr("d", line(data))
+      .style("stroke-width", 2)
+      .style("stroke", color)
+      .style("fill", "none")
+      .attr("transform", "translate(" + w/14 + ",0)"); 
     }
 
-    var charts = ["#sleep-graph","#energy-graph", "#stress-graph"];    
-    var arrayLength = charts.length;
-    for (var i = 0; i < arrayLength; i++) {
-        displayGraph(charts[i], 200, 70);
-    }
-      
+  function addCircles(data, color) {
+    svg.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d,i) { return x(i)+ w/14; })
+      .attr("cy", function(d)   { return y(d);       })
+      .attr("r", 3)
+      .style("fill", color);      
+  };
+
+  var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
+  var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
+  var sleep = [6,7,6,5,4,5,8];
+  var stress = [3,2,1,4,3,2,2];
+  var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
+  var energy = [7.0, 7.2, 2.5, 6.3, 6.4, 8.2, 7.0]
+  addLine(sleep, colors[0]);
+  addLine(stress, colors[1]);
+  addLine(weight, colors[2]);
+  addLine(energy, colors[3]);
+  // addCircles(stress, "red");
+
+  //Add a legend 
+  var legend = svg.append("g")
+    .attr("class", "legend")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("height", 100)
+    .attr("width", 100);
+
+  legend.selectAll('g').data(names)
+      .enter()
+      .append('g')
+      .attr("class", "legend")
+      .each(function(d, i) {
+        var g = d3.select(this);
+        g.append("rect")
+          .attr("x", 25 + i*80 - 80*(i%2) )
+          .attr("y", h + 60 + 18*(i%2))
+          .attr("width", 10)
+          .attr("height", 10)
+          .style("fill", colors[i]);
+        
+        g.append("text")
+          .attr("x", 25 + i * 80 + 12 - 80*(i%2))
+          .attr("y", h + 70 + 18*(i%2))
+          .attr("height",30)
+          .attr("width",100)
+          .text(function(d) {return d});
+
+      });
+
+
+
+  // Add axes
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(xAxis)
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", "-.15em")
+    .attr("dy", ".15em")
+    .attr("transform", function(d) {
+        return "rotate(-75)" 
+        });                    
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);   
+
+  svg.append("g")
+      .attr("class", "weight axis")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(weightAxis);      
+
 </script>
 
-
 <style>
-  .graph-wrapper {
-    width: 200px;
-    margin: 20px auto;
-    border-left: 1px solid #C0C0C0;
-    border-right: 1px solid #C0C0C0;
-  }
-  .report-graph {
-    height: 60px;
-    width:100%;
-    margin: 0 auto;
-  }
 
-  .report-graph path {
-     stroke: #1b70e0;
-     stroke-width: 2;
-     fill: none;
-  }
+.legend text, 
+.axis text {
+  font: 12px sans-serif;
+}
 
-  #stress-graph path {
-    stroke: #FF8F65;
-  }
-  #sleep-graph  path{
-    stroke: #FFD865;
-  }
-  #energy-graph path {
-    stroke: #6FC3FF;
-  }
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 
 </style>
