@@ -1,5 +1,6 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <br>
+
 <div class="row">
   <div class="well col-md-4 col-md-offset-4 well">
     <h2 style="text-align: center ">Your Diary</h2>
@@ -15,10 +16,15 @@
 
   </div>
 </div>
-<br>
+
+<%= content_tag :div, :hidden, id: "entries", data: {entries: Report.order("created_at").last(limit=7).to_a.map{ |r| r.to_hash}.to_json } %>
 
 <script type="text/javascript">
-
+  var dataset = $(entries).data()["entries"];
+  var sleep = dataset.map(function(dp){return dp.sleep;});
+  var energy = dataset.map(function(dp){return dp.energy;});
+  var stress = dataset.map(function(dp){return dp.stress;});
+  
   // margins
   var margin = {top: 20, right: 40, bottom: 100, left: 30};
   var w = 350 - margin.left - margin.right;
@@ -53,7 +59,6 @@
                   .domain([100,300])
                   .nice();
 
-
   var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
@@ -74,7 +79,6 @@
                     .x(function(d,i) { return x(i); })
                     .y(function(d) { return y(d); })
                     .interpolate("monotone");
-                    // .tension(0); 
 
   svg.selectAll("rect")
        .data(dataset)
@@ -105,29 +109,25 @@
       .style("fill", "none")
       .attr("transform", "translate(" + w/14 + ",0)"); 
     }
-
-  function addCircles(data, color) {
-    svg.selectAll("circle")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("cx", function(d,i) { return x(i)+ w/14; })
-      .attr("cy", function(d)   { return y(d);       })
-      .attr("r", 3)
-      .style("fill", color);      
-  };
+      
+  // function addCircles(data, color) {
+  //   svg.selectAll("circle")
+  //     .data(data)
+  //     .enter()
+  //     .append("circle")
+  //     .attr("cx", function(d,i) { return x(i)+ w/14; })
+  //     .attr("cy", function(d)   { return y(d);       })
+  //     .attr("r", 3)
+  //     .style("fill", color);      
+  // };
 
   var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
   var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
-  var sleep = [6,7,6,5,4,5,8];
-  var stress = [3,2,1,4,3,2,2];
   var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
-  var energy = [7.0, 7.2, 2.5, 6.3, 6.4, 8.2, 7.0]
   addLine(sleep, colors[0]);
   addLine(stress, colors[1]);
   addLine(weight, colors[2]);
   addLine(energy, colors[3]);
-  // addCircles(stress, "red");
 
   //Add a legend 
   var legend = svg.append("g")
@@ -151,15 +151,12 @@
           .style("fill", colors[i]);
         
         g.append("text")
-          .attr("x", 25 + i * 80 + 12 - 80*(i%2))
+          .attr("x", 37 + i*80 - 80*(i%2))
           .attr("y", h + 70 + 18*(i%2))
           .attr("height",30)
           .attr("width",100)
           .text(function(d) {return d});
-
       });
-
-
 
   // Add axes
   svg.append("g")
