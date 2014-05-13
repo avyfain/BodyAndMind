@@ -181,8 +181,18 @@
       .call(weightAxis);  
  
 //dummy data for mood 
-  var dataMood = [42.86, 28.57, 14.29, 14.29];
-  var mood = ["Tense", "Cheerful", "Happy", "Loving"];
+  var dataMood =[];
+  var mood = [];
+  var moods = [];
+  var moodscount ={};
+  <% for report in @reports -%>
+  moods.push("<%= report.mood %>");
+  <% end -%>
+  moods.map( function (a) { if (a in moodscount) moodscount[a] ++; else moodscount[a] = 1; } );
+  $.each(moodscount, function(key, value) {
+      dataMood.push((value*100)/7);
+      mood.push(key);
+  });
 
   var colorMood = d3.scale.linear()
   					.domain([0, dataMood.length])
@@ -202,8 +212,8 @@
   var xAxis2 = d3.svg.axis()
                     .scale(x2)
                     .orient("top")
-                    .ticks(dataMood.length-1)
-                    .tickValues([0, 1, 2, 3])
+                    .ticks(dataMood.length)
+                    //.tickValues([0, 1, 2, 3])
                     .tickFormat(function(d) {return mood[d];});
                     
                     
