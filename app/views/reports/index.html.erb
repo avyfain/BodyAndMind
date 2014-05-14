@@ -205,13 +205,13 @@
 
   var y2 = d3.scale.linear()
                   .range([0, h])
-                  .domain([0,100])
+                  .domain([100,0])
                   .nice();
 
 
   var xAxis2 = d3.svg.axis()
                     .scale(x2)
-                    .orient("top")
+                    .orient("bottom")
                     .ticks(dataMood.length)
                     //.tickValues([0, 1, 2, 3])
                     .tickFormat(function(d) {return mood[d];});
@@ -230,20 +230,28 @@
 
 //append bar     
   var bars = svg2.selectAll("rect")
-  			 .data(dataMood)
-  			 .enter()
-  			 	.append("rect")
-				.attr("height", function(d) {return d*h/100;})
-  			 	.attr("width", w / dataMood.length /2 )
-  			 	.attr("fill", function(d, i) {return colorMood(i)})
-  			 	.attr("x", function(d, i) { return i * w / dataMood.length });
+          .data(dataMood)
+          .enter()
+          .append("rect")
+          .attr("height", function(d) {return d*h/100;})
+          .attr("width", w / dataMood.length /2 )
+          .attr("fill", function(d, i) {return colorMood(i)})
+          .attr("x", function(d, i) { return w / dataMood.length/4 + i * w / dataMood.length })
+          .attr("y", function(d) { return h-d*h/100 });
 
-//append axises  			 	
+//append axes  			 	
   svg2.append("g")
   		.attr("class", "x axis")
+      .attr("transform", "translate(0," + h + ")")
   		.call(xAxis2)
   		.selectAll("text") 
-  		.attr("transform", "translate(" + w/4/dataMood.length + " ,0)");
+      .style("text-anchor", "end")
+      .attr("dx", "-.15em")
+      .attr("dy", "1.5em")
+      .attr("transform", function(d) {
+        return "rotate(-75)" 
+      });                    
+  		// .attr("transform", "translate(" + w/4/dataMood.length + " ,0)");
   	   
   svg2.append("g")
       .attr("class", "y axis")
