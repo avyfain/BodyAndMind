@@ -12,15 +12,8 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
-  display: table;
   height: 100%;
   width: 100%;
-  position: relative;
-  background-image: url(image-path('bg.jpg'));
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   margin: 0;
 }
 
