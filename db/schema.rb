@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140505022709) do
+ActiveRecord::Schema.define(version: 20140515225132) do
 
   create_table "reports", force: true do |t|
     t.datetime "created_at"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20140505022709) do
     t.string   "weather"
     t.integer  "temperature"
     t.string   "geolocation"
+    t.string   "comments"
   end
 
 end
