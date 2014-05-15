@@ -17,11 +17,11 @@
   </div>
 </div>
 
-<%= content_tag :div, :hidden, id: "entries", data: {entries: Report.order("created_at").last(limit=7).to_a.map{ |r| r.to_hash}.to_json } %>
+<%= content_tag :div, :hidden, id: "entries", data: {entries: Report.last(7).to_json } %>
 
 <script type="text/javascript">
   var dataset = $(entries).data()["entries"];
-  var sleep = dataset.map(function(dp){return dp.sleep;});
+  var sleep = [6,7,7,8,6,6,7] //dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
   
