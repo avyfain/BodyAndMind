@@ -34,6 +34,10 @@
   var barPadding = 0;
   
   var dataset = [0,1,0,1,0,1,0];
+
+  var line_ids = ["sleep", "energy", "stress", "weight"]
+  var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
+  var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
   
   //Create SVG element
   var svg = d3.select("#line-graph")
@@ -100,14 +104,15 @@
           }
        });
 
-  function addLine(data, color) {
+  function addLine(data, color, name) {
     svg.append("svg:path")
       .attr("class", "line")
+      .attr("id", name)
       .attr("d", line(data))
       .style("stroke-width", 2)
       .style("stroke", color)
       .style("fill", "none")
-      .attr("transform", "translate(" + w/14 + ",0)"); 
+      .attr("transform", "translate(" + w/14 + ",0)");
     }
       
   // function addCircles(data, color) {
@@ -121,13 +126,11 @@
   //     .style("fill", color);      
   // };
 
-  var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
-  var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
   var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
-  addLine(sleep, colors[0]);
-  addLine(energy, colors[1]);
-  addLine(stress, colors[2]);
-  addLine(weight, colors[3]);
+  addLine(sleep, colors[0], line_ids[0]);
+  addLine(energy, colors[1], line_ids[1]);
+  addLine(stress, colors[2], line_ids[2]);
+  addLine(weight, colors[3], line_ids[3]);
 
   //Add a legend 
   var legend = svg.append("g")
@@ -136,27 +139,6 @@
     .attr("y", 0)
     .attr("height", 100)
     .attr("width", 100);
-
-  legend.selectAll('g').data(names)
-      .enter()
-      .append('g')
-      .attr("class", "legend")
-      .each(function(d, i) {
-        var g = d3.select(this);
-        g.append("rect")
-          .attr("x", 25 + i*80 - 80*(i%2) )
-          .attr("y", h + 60 + 18*(i%2))
-          .attr("width", 10)
-          .attr("height", 10)
-          .style("fill", colors[i]);
-        
-        g.append("text")
-          .attr("x", 37 + i*80 - 80*(i%2))
-          .attr("y", h + 70 + 18*(i%2))
-          .attr("height",30)
-          .attr("width",100)
-          .text(function(d) {return d});
-      });
 
   // Add axes
   svg.append("g")
@@ -259,6 +241,40 @@
   
 
 </script>
+<script>
+legend.selectAll('g').data(names)
+      .enter()
+      .append('g')
+      .attr("class", "legend")
+      .each(function(d, i) {
+        var g = d3.select(this);
+        g.append("rect")
+          .attr("x", 25 + i*80 - 80*(i%2) )
+          .attr("y", h + 60 + 18*(i%2))
+          .attr("width", 10)
+          .attr("height", 10)
+          .style("fill", colors[i]);
+        
+        g.append("text")
+          .attr("x", 37 + i*80 - 80*(i%2))
+          .attr("y", h + 70 + 18*(i%2))
+          .attr("height",30)
+          .attr("width",100)
+          .text(function(d) {return d});
+        g.on("click", function() {
+                              $('#'+line_ids[i]+'.line').toggle();
+                              
+                              if($(this).css('opacity') == 1){
+                                $(this).animate({opacity:0.5}, 100);
+                              } else{
+                                $(this).animate({opacity:1}, 100);
+                              }
+
+                              });
+      });
+
+</script>
+
 
 <style>
 
@@ -272,6 +288,10 @@
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+.grayedOut {
+  opacity: 0.5;
 }
 
 </style>
