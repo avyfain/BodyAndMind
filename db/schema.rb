@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140515225132) do
+ActiveRecord::Schema.define(version: 20140517222627) do
 
   create_table "reports", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "sleep"
+    t.integer  "sleep"
     t.datetime "wake"
-    t.integer  "excercise"
+    t.string   "excercise"
     t.integer  "energy"
     t.string   "mood"
     t.float    "weight"

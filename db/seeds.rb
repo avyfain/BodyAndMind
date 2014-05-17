@@ -6,13 +6,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 365.times do |n|
-    @date = Time.now - n.day
     @r = lambda{rand(1..10)}
+    @ySlashN = lambda{["Yes", "No"].sample}
     @moods = ["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"]
     @report = Report.create!(
-      sleep: @date,
-      wake: @date + @r[].hour,
-      excercise: @r[],
+      sleep: @r[],
+      excercise: @ySlashN[],
       energy: @r[],
       mood:@moods.sample,
       weight:160+@r[],

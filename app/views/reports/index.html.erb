@@ -17,13 +17,38 @@
   </div>
 </div>
 
-<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7).to_json } %>
+<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7)} %>
+
+<%= content_tag :div, :hidden, class: "hide", id: "dates", data: {:endTime => Time.now().strftime('%b %d'), :startTime =>(Time.now() - (Report.last(7).to_a.length).days).strftime('%b %d')} %>
+
 
 <script type="text/javascript">
   var dataset = $(entries).data()["entries"];
-  var sleep = [6,7,7,8,6,6,7] //dataset.map(function(dp){return dp.sleep;});
+  //show weight
+  var weightraw = dataset.map(function(dp){return dp.weight});
+  var weight_max = Math.max.apply(Math, weightraw);
+  var weight_min = Math.min.apply(Math, weightraw);
+  var weight_medium = (weight_max+weight_min)/2;
+  var weight_divisor = weight_medium/5;
+  var weight = weightraw;
+  
+  for(var i = 0, length = weightraw.length; i < length; i++){
+    weight[i] = weightraw[i]/weight_divisor;
+	}
+  
+  var startTime = $(dates).data()["starttime"];
+  var endTime = $(dates).data()["endtime"];
+
+  var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
+  var excercise = dataset.map(function(dp) {
+      if (dp.excercise == "Yes") {
+        return 1;
+      } else {
+      return 0;
+      }
+      });
   
   // margins
   var margin = {top: 20, right: 40, bottom: 100, left: 30};
@@ -33,8 +58,6 @@
   //Width and height
   var barPadding = 0;
   
-  var dataset = [0,1,0,1,0,1,0];
-
   var line_ids = ["sleep", "energy", "stress", "weight"]
   var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
   var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
@@ -60,16 +83,15 @@
 
   var y_weight = d3.scale.linear()
                   .range([h, 0])
-                  .domain([100,300])
+                  .domain([weight_min-20,weight_max+20])
                   .nice();
 
   var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
-                    .ticks(6)
-                    .tickPadding(w/14)
-                    .tickValues([0,1,2,3,4,5,6])
-                    .tickFormat(function(d) {return "May " + (parseInt(d) +10)});
+                    .ticks(2)
+                    .tickPadding(10)
+  .tickValues([0, 6]).tickFormat(function(d){if (d==0) {return startTime;} else {return endTime;}});
 
   var yAxis = d3.svg.axis()
                     .scale(y)
@@ -85,7 +107,7 @@
                     .interpolate("monotone");
 
   svg.selectAll("rect")
-       .data(dataset)
+       .data(excercise)
        .enter()
        .append("rect")
        .attr("x", function(d, i) {
@@ -126,7 +148,6 @@
   //     .style("fill", color);      
   // };
 
-  var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
   addLine(sleep, colors[0], line_ids[0]);
   addLine(energy, colors[1], line_ids[1]);
   addLine(stress, colors[2], line_ids[2]);
@@ -151,7 +172,7 @@
     .attr("dy", ".15em")
     .attr("transform", function(d) {
         return "rotate(-75)" 
-        });                    
+        });
 
   svg.append("g")
       .attr("class", "y axis")
