@@ -21,9 +21,19 @@
 
 <script type="text/javascript">
   var dataset = $(entries).data()["entries"];
-  var sleep = [6,7,7,8,6,6,7] //dataset.map(function(dp){return dp.sleep;});
+  var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
+  var excercise = dataset.map(function(dp) {
+      console.log("HERE!!!");
+      console.log(dp.excercise);
+      if (dp.excercise == "Yes") {
+        return 1;
+      } else {
+      return 0;
+      }
+      });
+  console.log(excercise);
   
   // margins
   var margin = {top: 20, right: 40, bottom: 100, left: 30};
@@ -32,8 +42,6 @@
 
   //Width and height
   var barPadding = 0;
-  
-  var dataset = [0,1,0,1,0,1,0];
   
   //Create SVG element
   var svg = d3.select("#line-graph")
@@ -81,7 +89,7 @@
                     .interpolate("monotone");
 
   svg.selectAll("rect")
-       .data(dataset)
+       .data(excercise)
        .enter()
        .append("rect")
        .attr("x", function(d, i) {
