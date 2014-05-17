@@ -83,7 +83,7 @@
 
   var y_weight = d3.scale.linear()
                   .range([h, 0])
-                  .domain([weight_min-20,weight_max+20])
+                  .domain([Math.max(0,(weight_min-20)),weight_max+20])
                   .nice();
 
   var xAxis = d3.svg.axis()
