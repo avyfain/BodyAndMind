@@ -25,15 +25,12 @@
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
   var excercise = dataset.map(function(dp) {
-      console.log("HERE!!!");
-      console.log(dp.excercise);
       if (dp.excercise == "Yes") {
         return 1;
       } else {
       return 0;
       }
       });
-  console.log(excercise);
   
   // margins
   var margin = {top: 20, right: 40, bottom: 100, left: 30};
