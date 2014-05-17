@@ -21,6 +21,18 @@
 
 <script type="text/javascript">
   var dataset = $(entries).data()["entries"];
+  //show weight
+  var weightraw = dataset.map(function(dp){return dp.weight});
+  var weight_max = Math.max.apply(Math, weightraw);
+  var weight_min = Math.min.apply(Math, weightraw);
+  var weight_medium = (weight_max+weight_min)/2;
+  var weight_divisor = weight_medium/5;
+  var weight = weightraw;
+  
+  for(var i = 0, length = weightraw.length; i < length; i++){
+    weight[i] = weightraw[i]/weight_divisor;
+	}
+  
   var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
@@ -61,7 +73,7 @@
 
   var y_weight = d3.scale.linear()
                   .range([h, 0])
-                  .domain([100,300])
+                  .domain([weight_min-20,weight_max+20])
                   .nice();
 
   var xAxis = d3.svg.axis()
@@ -128,7 +140,7 @@
 
   var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
   var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
-  var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
+  //var weight = [3.0, 3.2, 3.5, 3.3, 3.4, 3.2, 3.0]
   addLine(sleep, colors[0]);
   addLine(energy, colors[1]);
   addLine(stress, colors[2]);
