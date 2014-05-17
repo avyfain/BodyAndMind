@@ -17,10 +17,16 @@
   </div>
 </div>
 
-<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7).to_json } %>
+<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7)} %>
+
+<%= content_tag :div, :hidden, class: "hide", id: "dates", data: {:endTime => Time.now().strftime('%b %d'), :startTime =>(Time.now() - (Report.last(7).to_a.length).days).strftime('%b %d')} %>
+
 
 <script type="text/javascript">
   var dataset = $(entries).data()["entries"];
+  var startTime = $(dates).data()["starttime"];
+  var endTime = $(dates).data()["endtime"];
+
   var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
@@ -67,10 +73,9 @@
   var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
-                    .ticks(6)
-                    .tickPadding(w/14)
-                    .tickValues([0,1,2,3,4,5,6])
-                    .tickFormat(function(d) {return "May " + (parseInt(d) +10)});
+                    .ticks(2)
+                    .tickPadding(10)
+  .tickValues([0, 6]).tickFormat(function(d){if (d==0) {return startTime;} else {return endTime;}});
 
   var yAxis = d3.svg.axis()
                     .scale(y)
@@ -174,7 +179,7 @@
     .attr("dy", ".15em")
     .attr("transform", function(d) {
         return "rotate(-75)" 
-        });                    
+        });
 
   svg.append("g")
       .attr("class", "y axis")
