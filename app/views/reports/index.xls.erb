@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:html="http://www.w3.org/TR/REC-html40">
+  :sleep, :wake, :excercise, :energy, :mood, :weight, :stress,
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Date</Data></Cell>
+        <Cell><Data ss:Type="String">Sleep</Data></Cell>
+        <Cell><Data ss:Type="String">Exercise</Data></Cell>
+        <Cell><Data ss:Type="String">Energy</Data></Cell>
+        <Cell><Data ss:Type="String">Mood</Data></Cell>
+        <Cell><Data ss:Type="String">Weight</Data></Cell>
+        <Cell><Data ss:Type="String">Stress</Data></Cell>
+      </Row>
+      <% @diaries.each do |diary| %>
+          <Row>
+            <Cell><Data ss:Type="Date"><%= diary.created_at %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= diary.sleep %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= diary.excercise%></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= diary.energy %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= diary.mood %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= diary.weight %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= diary.stress %></Data></Cell>
+          </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
