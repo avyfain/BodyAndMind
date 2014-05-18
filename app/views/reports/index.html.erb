@@ -34,11 +34,11 @@
   var weight_max = Math.max.apply(Math, weightraw);
   var weight_min = Math.min.apply(Math, weightraw);
   var weight_medium = (weight_max+weight_min)/2;
-  var weight_divisor = weight_medium/5;
+  var weight_divisor = (weight_max-weight_min+40)/10;
   var weight = weightraw;
   
   for(var i = 0, length = weightraw.length; i < length; i++){
-    weight[i] = weightraw[i]/weight_divisor;
+    weight[i] = 5+(weightraw[i]-weight_medium)/weight_divisor;
 	}
   
   var startTime = $(dates).data()["starttime"];
