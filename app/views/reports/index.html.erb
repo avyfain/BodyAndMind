@@ -33,8 +33,10 @@
   var weightraw = dataset.map(function(dp){return dp.weight});
   var weight_max = Math.max.apply(Math, weightraw);
   var weight_min = Math.min.apply(Math, weightraw);
-  var weight_medium = (weight_max+weight_min)/2;
-  var weight_divisor = (weight_max-weight_min+40)/10;
+  var weight_upper = weight_max+20;
+  var weight_lower = Math.max(0,(weight_min-20));
+  var weight_medium = (weight_upper+weight_lower)/2;
+  var weight_divisor = (weight_upper-weight_lower)/10;
   var weight = weightraw;
   
   for(var i = 0, length = weightraw.length; i < length; i++){
@@ -88,8 +90,8 @@
 
   var y_weight = d3.scale.linear()
                   .range([h, 0])
-                  .domain([Math.max(0,(weight_min-20)),weight_max+20])
-                  .nice();
+                  .domain([weight_lower,weight_upper]);
+                  //.nice()
 
   var xAxis = d3.svg.axis()
                     .scale(x)
