@@ -24,7 +24,8 @@
 
 <%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7)} %>
 
-<%= content_tag :div, :hidden, class: "hide", id: "dates", data: {:endTime => Time.now().strftime('%b %d'), :startTime =>(Time.now() - (Report.last(7).to_a.length).days).strftime('%b %d')} %>
+
+<%= content_tag :div, :hidden, class: "hide", id: "date_labels", data: {date_labels: Report.last(7).map {|x| x.created_at.strftime('%b %d')}.sort} %>
 
 
 <script type="text/javascript">
@@ -43,8 +44,7 @@
     weight[i] = 5+(weightraw[i]-weight_medium)/weight_divisor;
 	}
   
-  var startTime = $(dates).data()["starttime"];
-  var endTime = $(dates).data()["endtime"];
+  var dates = $(date_labels).data()["dateLabels"]
 
   var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
@@ -96,9 +96,10 @@
   var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
-                    .ticks(2)
-                    .tickPadding(10)
-  .tickValues([0, 6]).tickFormat(function(d){if (d==0) {return startTime;} else {return endTime;}});
+                    .ticks(6)
+                    .tickPadding(w/14)
+                    .tickValues([0,1,2,3,4,5,6])
+                    .tickFormat(function(d, i){ return dates[i]}); 
 
   var yAxis = d3.svg.axis()
                     .scale(y)
