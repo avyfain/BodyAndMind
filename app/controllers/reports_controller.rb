@@ -1,15 +1,29 @@
 class ReportsController < ApplicationController
-  before_action :set_report, only: [:show, :edit, :update, :destroy]
+  before_action :set_report, only: [ :edit, :update, :destroy]
 
   # GET /reports
   # GET /reports.json
   def index
     @reports = Report.last(7)
+    @diaries = Report.order(:created_at)
+    respond_to do |format|
+      format.html
+      format.csv { send_data @diaries.to_csv }
+      format.xls { send_data @diaries.to_csv(col_sep: "\t") }
+    end
   end
 
   # GET /reports/1
   # GET /reports/1.json
   def show
+      ReportMailer.MailReports(params[:export][:email]).deliver
+      flash[:success] = params[:export][:email]
+      @diaries = Report.order(:created_at)
+      respond_to do |format|
+        format.html
+        format.csv { send_data @diaries.to_csv }
+        format.xls { send_data @diaries.to_csv(col_sep: "\t") }
+      end
   end
 
   # GET /reports/new
