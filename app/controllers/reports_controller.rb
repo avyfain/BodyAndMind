@@ -17,13 +17,8 @@ class ReportsController < ApplicationController
   # GET /reports/1.json
   def show
       ReportMailer.MailReports(params[:export][:email]).deliver
-      flash[:success] = params[:export][:email]
-      @diaries = Report.order(:created_at)
-      respond_to do |format|
-        format.html
-        format.csv { send_data @diaries.to_csv }
-        format.xls { send_data @diaries.to_csv(col_sep: "\t") }
-      end
+      flash[:success] = "Email sent"
+      redirect_to reports_path
   end
 
   # GET /reports/new
