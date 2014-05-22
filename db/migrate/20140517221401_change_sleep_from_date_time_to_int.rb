@@ -1,5 +1,10 @@
 class ChangeSleepFromDateTimeToInt < ActiveRecord::Migration
   def change
-    change_column(:reports, :sleep, :integer)
+    add_column(:reports, :sleep_tmp, :integer)
+    Report.each do |r|
+    	r.sleep_tmp = r.sleep.hour
+    end
+    remove_column(:reports, :sleep)
+    rename_column(:reports, :sleep_tmp, :sleep)
   end
 end
