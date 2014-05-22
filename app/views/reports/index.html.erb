@@ -51,13 +51,13 @@
   var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
-  var excercise = dataset.map(function(dp) {
-      if (dp.excercise == "Yes") {
+  var excercise = dataset.map(function(dp) {return dp.excercise;});
+      /*if (dp.excercise == "Yes") {
         return 1;
       } else {
       return 0;
       }
-      });
+      });*/
   
   // margins
   var margin = {top: 20, right: 30, bottom: 100, left: 40};
@@ -129,7 +129,7 @@
        .attr("width", w / dataset.length - barPadding)
        .attr("height", h)
        .style("fill", function(d) {
-          if (d==1) {
+          if (d==1||String(d).valueOf() == new String("Yes").valueOf()) {
             return "rgba(51,204,255,.15)"
           } else {
             return "rgba(255,255,255,.15)"
