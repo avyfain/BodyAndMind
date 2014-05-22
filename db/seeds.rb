@@ -20,7 +20,8 @@
       temperature: nil,
       geolocation: nil
     )
-    @report.update_attribute :created_at, @date
-    @report.update_attribute :updated_at, @date
+    @report.update_attribute :created_at, n.days.ago
+    @report.update_attribute :updated_at, n.days.ago
+    @report.save
 end
 
