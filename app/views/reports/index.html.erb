@@ -314,8 +314,17 @@ legend.selectAll('g').data(names)
 
 // ///////////////////////////
   
-var width = 300
-var height = 300
+
+var mood_numdata =[];
+var mood_keys = [];
+for(var key in moodscount) {
+    var value = moodscount[key];
+    mood_numdata.push(value);
+    mood_keys.push(key);
+};
+
+var width = 300;
+var height = 300;
 var radius = 150;
 
 var color = d3.scale.category20();
@@ -323,7 +332,7 @@ var color = d3.scale.category20();
 var pie = d3.layout.pie()
     .sort(null);
 
-var piedata = pie(dataMood);
+var piedata = pie(mood_numdata);
 
 var arc = d3.svg.arc()
     .innerRadius(radius - 110)
@@ -356,7 +365,7 @@ svg.selectAll("text").data(piedata)
         d.cy = Math.sin(a) * (radius - 95);
         return d.y = Math.sin(a) * (radius - 40);
     })
-    .text(function(d,i) { return moods[i]; })
+    .text(function(d,i) { return mood_keys[i]; })
     .each(function(d) {
         var bbox = this.getBBox();
         d.sx = d.x - bbox.width/2 - 2;
