@@ -358,7 +358,7 @@ svg.selectAll("text").data(piedata)
     .attr("x", function(d) {
         var a = d.startAngle + (d.endAngle - d.startAngle)/2 - Math.PI/2;
         d.cx = Math.cos(a) * (radius - 95);
-        return d.x = Math.cos(a) * (radius - 30);
+        return d.x = Math.cos(a) * (radius - 40);
     })
     .attr("y", function(d) {
         var a = d.startAngle + (d.endAngle - d.startAngle)/2 - Math.PI/2;
