@@ -18,6 +18,9 @@
     <div class="graph-wrapper">
       <span class="report-graph" id="mood-graph"></span>
     </div> 
+    <div class="graph-wrapper">
+      <span class="report-graph" id="mood-graph2"></span>
+    </div> 
 </div> 
 <hr>
 <div class="row col-md-2 col-md-offset-2">
@@ -243,71 +246,155 @@ legend.selectAll('g').data(names)
       mood.push(key);
   });
 
-  var colorMood = d3.scale.linear()
-  					.domain([0, dataMood.length])
-  					.range(["#ff759f", "#ff9175"]);
+//   var colorMood = d3.scale.linear()
+//   					.domain([0, dataMood.length])
+//   					.range(["#ff759f", "#ff9175"]);
   					
-  var x2 = d3.scale.linear()
-                  .range([0, w])
-                  .domain([0, dataMood.length])
-                  .nice();
+//   var x2 = d3.scale.linear()
+//                   .range([0, w])
+//                   .domain([0, dataMood.length])
+//                   .nice();
 
-  var y2 = d3.scale.linear()
-                  .range([0, h])
-                  .domain([100,0])
-                  .nice();
+//   var y2 = d3.scale.linear()
+//                   .range([0, h])
+//                   .domain([100,0])
+//                   .nice();
 
 
-  var xAxis2 = d3.svg.axis()
-                    .scale(x2)
-                    .orient("bottom")
-                    .ticks(dataMood.length)
-                    //.tickValues([0, 1, 2, 3])
-                    .tickFormat(function(d) {return mood[d];});
+//   var xAxis2 = d3.svg.axis()
+//                     .scale(x2)
+//                     .orient("bottom")
+//                     .ticks(dataMood.length)
+//                     //.tickValues([0, 1, 2, 3])
+//                     .tickFormat(function(d) {return mood[d];});
                     
                     
-  var yAxis2 = d3.svg.axis()
-                    .scale(y2)
-                    .orient("left")
-                    .ticks(5)
-                    .tickFormat(function(d) {return d + "%"});
+//   var yAxis2 = d3.svg.axis()
+//                     .scale(y2)
+//                     .orient("left")
+//                     .ticks(5)
+//                     .tickFormat(function(d) {return d + "%"});
   			    
-  var svg2 = d3.select("#mood-graph")
-    .append("svg")
-    .attr("width", w + margin.left + margin.right)
-    .attr("height", h + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left*1.5 + "," + margin.top + ")");
+//   var svg2 = d3.select("#mood-graph")
+//     .append("svg")
+//     .attr("width", w + margin.left + margin.right)
+//     .attr("height", h + margin.top + margin.bottom)
+//     .append("g")
+//     .attr("transform", "translate(" + margin.left*1.5 + "," + margin.top + ")");
 
-//append bar     
-  var bars = svg2.selectAll("rect")
-          .data(dataMood)
-          .enter()
-          .append("rect")
-          .attr("height", function(d) {return d*h/100;})
-          .attr("width", w / dataMood.length /2 )
-          .attr("fill", function(d, i) {return colorMood(i)})
-          .attr("x", function(d, i) { return w / dataMood.length/4 + i * w / dataMood.length })
-          .attr("y", function(d) { return h-d*h/100 });
+// //append bar     
+//   var bars = svg2.selectAll("rect")
+//           .data(dataMood)
+//           .enter()
+//           .append("rect")
+//           .attr("height", function(d) {return d*h/100;})
+//           .attr("width", w / dataMood.length /2 )
+//           .attr("fill", function(d, i) {return colorMood(i)})
+//           .attr("x", function(d, i) { return w / dataMood.length/4 + i * w / dataMood.length })
+//           .attr("y", function(d) { return h-d*h/100 });
 
-//append axes  			 	
-  svg2.append("g")
-  		.attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
-  		.call(xAxis2)
-  		.selectAll("text") 
-      .style("text-anchor", "end")
-      .attr("dx", "-.15em")
-      .attr("dy", "1.5em")
-      .attr("transform", function(d) {
-        return "rotate(-75)" 
-      });                    
-  		// .attr("transform", "translate(" + w/4/dataMood.length + " ,0)");
+// //append axes  			 	
+//   svg2.append("g")
+//   		.attr("class", "x axis")
+//       .attr("transform", "translate(0," + h + ")")
+//   		.call(xAxis2)
+//   		.selectAll("text") 
+//       .style("text-anchor", "end")
+//       .attr("dx", "-.15em")
+//       .attr("dy", "1.5em")
+//       .attr("transform", function(d) {
+//         return "rotate(-75)" 
+//       });                    
+//   		// .attr("transform", "translate(" + w/4/dataMood.length + " ,0)");
   	   
-  svg2.append("g")
-      .attr("class", "y axis")
-      .call(yAxis2);
+//   svg2.append("g")
+//       .attr("class", "y axis")
+//       .call(yAxis2);
   
+
+// ///////////////////////////
+  
+var width = 300
+var height = 300
+var radius = 150;
+
+var color = d3.scale.category20();
+
+var pie = d3.layout.pie()
+    .sort(null);
+
+var piedata = pie(dataMood);
+
+var arc = d3.svg.arc()
+    .innerRadius(radius - 110)
+    .outerRadius(radius - 80);
+
+var svg = d3.select("#mood-graph")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + (width / 2 +10)+ "," + height / 2 + ")");
+
+var path = svg.selectAll("path")
+    .data(piedata)
+    .enter().append("path")
+    .attr("fill", function(d, i) { return color(i); })
+    .attr("d", arc);
+
+svg.selectAll("text").data(piedata)
+    .enter()
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", function(d) {
+        var a = d.startAngle + (d.endAngle - d.startAngle)/2 - Math.PI/2;
+        d.cx = Math.cos(a) * (radius - 95);
+        return d.x = Math.cos(a) * (radius - 30);
+    })
+    .attr("y", function(d) {
+        var a = d.startAngle + (d.endAngle - d.startAngle)/2 - Math.PI/2;
+        d.cy = Math.sin(a) * (radius - 95);
+        return d.y = Math.sin(a) * (radius - 40);
+    })
+    .text(function(d,i) { return moods[i]; })
+    .each(function(d) {
+        var bbox = this.getBBox();
+        d.sx = d.x - bbox.width/2 - 2;
+        d.ox = d.x + bbox.width/2 + 2;
+        if (d.y < 0) {
+          d.sy = d.oy = d.y + 5;
+        } else {
+          d.sy = d.oy = d.y - 15;
+        }
+    });
+
+svg.append("defs").append("marker")
+    .attr("id", "circ")
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("refX", 3)
+    .attr("refY", 3)
+    .append("circle")
+    .attr("cx", 3)
+    .attr("cy", 3)
+    .attr("r", 3);
+
+svg.selectAll("path.pointer").data(piedata).enter()
+    .append("path")
+    .attr("class", "pointer")
+    .style("fill", "none")
+    .style("stroke", "black")
+    .attr("marker-end", "url(#circ)")
+    .attr("d", function(d) {
+        if(d.cx > d.ox) {
+            return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+        } else {
+            return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+        }
+    });
+/////////////////////////////
+
+
 
 </script>
 
