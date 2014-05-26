@@ -34,6 +34,8 @@
 
 
 <script type="text/javascript">
+
+				
   var dataset = $(entries).data()["entries"];
   //show weight
   var weightraw = dataset.map(function(dp){return dp.weight});
@@ -110,9 +112,10 @@
                     .scale(y)
                     .orient("left"); 
 
-  var weightAxis = d3.svg.axis()
+ var weightAxis = d3.svg.axis()
                     .scale(y_weight)
-                    .orient("right");                                        
+                    .orient("right"); 
+                                                           
 
   var line = d3.svg.line()
                     .x(function(d,i) { return x(i); })
@@ -192,7 +195,8 @@
       .call(yAxis);   
 
   svg.append("g")
-      .attr("class", "weight axis")
+      .attr("class", "weightaxis")
+      .style("fill", "#FF7400")
       .attr("transform", "translate(" + w + ",0)")
       .call(weightAxis);  
  
@@ -419,6 +423,13 @@ svg.selectAll("path.pointer").data(piedata).enter()
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+.weightaxis path,
+.weightaxis line {
+	fill: none;
+	stroke: #FF7400;
+	shape-rendering: crispEdges;
 }
 
 .grayedOut {
