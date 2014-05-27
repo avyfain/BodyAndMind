@@ -7,6 +7,10 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def index
+      redirect_to reports_path 
+  end
+
   # GET /users/1/edit
   def edit
   end
