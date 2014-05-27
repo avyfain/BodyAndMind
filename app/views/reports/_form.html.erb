@@ -40,7 +40,7 @@
      <script type="text/javascript">
        function showEnValue(newValue)
        {
-          $(".control-label[for=report_energy]")[0].innerText = "Energy: " + newValue.toString();
+         $(".control-label[for=report_energy]")[0].innerText = "Energy: " + newValue.toString();
        }
      </script>
 
@@ -62,16 +62,11 @@
      <script type="text/javascript">
        function showStValue(newValue)
        {
-          $(".control-label[for=report_stress]")[0].innerText = "Stress: " + newValue.toString();
+         $(".control-label[for=report_stress")[0].innerText = "Stress: " + newValue.toString();
        }
      </script>
-
-
-
-
-
-
-      <%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
+     
+     <%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
       </div>
 
     <div class="form-actions">
