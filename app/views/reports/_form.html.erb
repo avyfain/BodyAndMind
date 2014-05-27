@@ -10,70 +10,70 @@
         <% end %>
       </ul>
     </div>
- <% end %>
+  <% end %>
 
- <div class="well">         <!--Temporary fix- Removed class col-md-6 col-md-offset-3-->
-  <fieldset>
+  <div class="well">         <!--Temporary fix- Removed class col-md-6 col-md-offset-3-->
+    <fieldset>
       <div class="col-md-8 col-md-offset-2">
-            <legend>Post to Your Diary</legend>
+        <legend>Post to Your Diary</legend>
 
-      <div class="form-group">
-      <%= f.number_field :sleep, label: "How many hours did you sleep last night?" %>
-      <%= f.number_field :weight, label: "Weight (lbs):", placeholder: "0" %>
-      <%= f.select :excercise, options_for_select(["Yes", "No"]), label: "Exercise" %>
-      <!--$("#report_stress").val()-->
-      <%= f.range_field :energy, value: 5, max: 10, 
-      onchange: "showEnValue(this.value)",
-      id: "ex1Slider",
-      label:"Energy: 5",
-      data: {
-        'slider-min' => '0',
-        'slider-max' => '10',
-        'slider-step' => '1',
-        'slider-value' => '10',
-      }
+        <div class="form-group">
+          <%= f.number_field :sleep, label: "How many hours did you sleep last night?" %>
+          <%= f.number_field :weight, label: "Weight (lbs):", placeholder: "0" %>
+          <%= f.select :excercise, options_for_select(["Yes", "No"]), label: "Exercise" %>
+          <!--$("#report_stress").val()-->
+          <%= f.range_field :energy, value: 5, max: 10, 
+            onchange: "showEnValue(this.value)",
+            id: "ex1Slider",
+            label:"Energy: 5",
+            data: {
+            'slider-min' => '0',
+            'slider-max' => '10',
+            'slider-step' => '1',
+            'slider-value' => '10',
+          }
+        %>
+
+
+
+
+        <script type="text/javascript">
+          function showEnValue(newValue)
+{
+  $(".control-label[for=report_energy]")[0].innerText = "Energy: " + newValue.toString();
+}
+</script>
+
+<%= f.range_field :stress, value: 5, max: 10, 
+  label: "Stress: 5",
+  id: "ex2Slider",
+  onchange: "showStValue(this.value)",
+  data: {
+  'slider-min' => '0',
+  'slider-max' => '10',
+  'slider-step' => '1',
+  'slider-value' => '10',
+  'mini'=>'true',
+  'data-highlight' => 'true'
+}
     %>
- 
 
 
+    <script type="text/javascript">
+      function showStValue(newValue)
+{
+  $(".control-label[for=report_stress]")[0].innerText = "Stress: " + newValue.toString();
+}
+</script>
 
-     <script type="text/javascript">
-       function showEnValue(newValue)
-       {
-         $(".control-label[for=report_energy]")[0].innerText = "Energy: " + newValue.toString();
-       }
-     </script>
-
-    <%= f.range_field :stress, value: 5, max: 10, 
-    label: "Stress: 5",
-    id: "ex2Slider",
-    onchange: "showStValue(this.value)",
-    data: {
-        'slider-min' => '0',
-        'slider-max' => '10',
-        'slider-step' => '1',
-        'slider-value' => '10',
-        'mini'=>'true',
-        'data-highlight' => 'true'
-      }
-    %>
-        
-        
-     <script type="text/javascript">
-       function showStValue(newValue)
-       {
-         $(".control-label[for=report_stress")[0].innerText = "Stress: " + newValue.toString();
-       }
-     </script>
-     
-     <%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
+<%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
       </div>
 
-    <div class="form-actions">
-      <%= f.submit %>
-    </div>
+      <div class="form-actions">
+        <%= f.submit %>
+      </div>
 
-  </div>
+    </div>
   </fieldset>
 <% end %>
 </div>
