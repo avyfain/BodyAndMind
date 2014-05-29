@@ -12,7 +12,7 @@
     </div>
   <% end %>
 
-  <div class="well">         <!--Temporary fix- Removed class col-md-6 col-md-offset-3-->
+  <div class="well">         
     <fieldset>
       <div class="col-md-8 col-md-offset-2">
         <legend>Post to Your Diary</legend>
@@ -33,8 +33,6 @@
             'slider-value' => '10',
           }
         %>
-
-
 
 
         <script type="text/javascript">
@@ -67,6 +65,8 @@
 </script>
 
 <%= f.select :mood, options_for_select(["Afraid", "Tense", "Depressed", "Disappointed", "Proud", "Cheerful", "Happy", "Loving", "Humiliated", "Sad"].shuffle) %>      
+      
+<%= f.text_area :comments, label: "Comment:", :cols => "30", :rows => "5" %>
       </div>
 
       <div class="form-actions">

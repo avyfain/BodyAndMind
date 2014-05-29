@@ -1,5 +1,5 @@
 class Report < ActiveRecord::Base
-	attr_accessible :sleep, :wake, :excercise, :energy, :mood, :weight, :stress, :weather, :temperature, :geolocation
+	attr_accessible :sleep, :excercise, :energy, :mood, :weight, :stress, :comments
 
   def to_hash
     sleep_seconds = self.wake - self.sleep
