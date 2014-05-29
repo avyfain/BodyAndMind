@@ -22,10 +22,6 @@
     )
     @report.update_attribute :created_at, n.days.ago
     @report.update_attribute :updated_at, n.days.ago
-    @report.update_attribute :email, "clemer19@gmail.com"
     @report.save
 end
-User.create(
-  email: "clemer19@gmail.com",
-  password: "password"
-).save
+
