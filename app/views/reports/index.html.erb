@@ -65,16 +65,16 @@
       });*/
   
   // margins
-  var margin = {top: 20, right: 30, bottom: 100, left: 40};
+  var margin = {top: 20, right: 30, bottom: 122, left: 40};
   var w = 300 - margin.left - margin.right;
-  var h = 300 - margin.top - margin.bottom;
+  var h = 330 - margin.top - margin.bottom;
 
   //Width and height
   var barPadding = 0;
   
   var line_ids = ["sleep", "energy", "stress", "weight"]
-  var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)"]
-  var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400"]
+  var names = ["Hours of Sleep","Energy Level","Stress Level", "Weight (lbs.)", "Exercise"]
+  var colors = ["#009999", "#1240AB", "#FFAA00", "#FF7400", "#DFF7FE"]
   
   //Create SVG element
   var svg = d3.select("#line-graph")
@@ -174,7 +174,7 @@
     .attr("class", "legend")
     .attr("x", 0)
     .attr("y", 0)
-    .attr("height", 100)
+    .attr("height", 150)
     .attr("width", 100);
 
   // Add axes
@@ -207,19 +207,25 @@ legend.selectAll('g').data(names)
       .each(function(d, i) {
         var g = d3.select(this);
         g.append("rect")
-          .attr("x", 2 + i*80 - 80*(i%2) )
-          .attr("y", h + 60 + 22*(i%2))
+          .attr("x", 2 + i*80 - 80*(i%2) -320*Math.floor(i/4) )
+          .attr("y", h + 60 + 22*(i%2) + 44*Math.floor(i/4))
           .attr("width", 16)
           .attr("height", 16)
-          .style("fill", colors[i]);
+          .style("fill", colors[i])
+          .style("stroke", "#000")
+          .style("stroke-width", 1);
         
         g.append("text")
-          .attr("x", 20 + i*80 - 80*(i%2))
-          .attr("y", h + 73 + 22*(i%2))
+          .attr("x", 20 + i*80 - 80*(i%2) -320*Math.floor(i/4))
+          .attr("y", h + 73 + 22*(i%2)+ 44*Math.floor(i/4))
           .attr("height",30)
           .attr("width",100)
           .text(function(d) {return d});
+        
         g.on("click", function() {
+                              if(i==4) { 
+                                return 
+                                } else {
                               $('#'+line_ids[i]+'.line').toggle();
                               
                               if($(this).css('opacity') == 1){
@@ -228,7 +234,7 @@ legend.selectAll('g').data(names)
                                 $(this).animate({opacity:1}, 100);
                               }
 
-                              });
+                              }});
       });
 
 
