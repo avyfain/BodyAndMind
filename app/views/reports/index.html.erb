@@ -53,6 +53,7 @@
   
   var dates = $(date_labels).data()["dateLabels"]
 
+  var comments = dataset.map(function(dp){return dp.comments;});
   var sleep = dataset.map(function(dp){return dp.sleep;});
   var energy = dataset.map(function(dp){return dp.energy;});
   var stress = dataset.map(function(dp){return dp.stress;});
@@ -153,21 +154,64 @@
       .attr("transform", "translate(" + w/14 + ",0)");
     }
       
-  // function addCircles(data, color) {
-  //   svg.selectAll("circle")
-  //     .data(data)
-  //     .enter()
-  //     .append("circle")
-  //     .attr("cx", function(d,i) { return x(i)+ w/14; })
-  //     .attr("cy", function(d)   { return y(d);       })
-  //     .attr("r", 3)
-  //     .style("fill", color);      
-  // };
+  function addCommentCircles(data, color) {
+    svg.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("id", function(d,i) { return "comment_" + i})
+      .attr("cx", function(d,i) { return x(i)+ w/14 + 3; })
+      .attr("cy", function(d)   { return y(0);       })
+      .attr("r", 5)
+      .attr("comment_on", 0)
+      .style("fill", function(d) {  if(d!=null) {
+                                      return color;
+                                    } else {
+                                      return 'none';}
+      })
+      .on("click", function(d) {
+        if ($(this).attr("comment_on")==0) {
+          $(this).attr("comment_on", 1)
+
+          div.transition()        
+                  .duration(200)      
+                  .style("opacity", .95);      
+              div .html(d)  
+                  .style("left", (d3.event.pageX)-50 + "px")     
+                  .style("top", (d3.event.pageY - 40) + "px");
+        } else {
+          $(this).attr("comment_on", 0)
+          div.transition()        
+                  .duration(200)      
+                  .style("opacity", 0);
+        }    
+      });      
+
+// 
+// .on("mouseover", function(d) {      
+//             div.transition()        
+//                 .duration(200)      
+//                 .style("opacity", .9);      
+//             div .html(formatTime(d.date) + "<br/>"  + d.close)  
+//                 .style("left", (d3.event.pageX) + "px")     
+//                 .style("top", (d3.event.pageY - 28) + "px");    
+//             })                  
+//         .on("mouseout", function(d) {       
+//             div.transition()        
+//                 .duration(500)      
+//                 .style("opacity", 0);   
+//         });
+// 
+
+
+
+  };
 
   addLine(sleep, colors[0], line_ids[0]);
   addLine(energy, colors[1], line_ids[1]);
   addLine(stress, colors[2], line_ids[2]);
   addLine(weight, colors[3], line_ids[3]);
+  
 
   //Add a legend 
   var legend = svg.append("g")
@@ -237,6 +281,11 @@ legend.selectAll('g').data(names)
                               }});
       });
 
+      addCommentCircles(comments, "#D11919")
+
+    var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
 
 
 // data for mood 
@@ -442,6 +491,19 @@ svg.selectAll("path.pointer").data(piedata).enter()
 }
 .grayedOut {
   opacity: 0.5;
+}
+
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 100px;                  
+  height: 32px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
 }
 
 </style>
