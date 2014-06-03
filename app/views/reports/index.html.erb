@@ -6,6 +6,11 @@
     <hr>
 </div>
 
+<div class="row">
+<input type="text" name="daynum" value='7' />
+<button type="button" id="ButtonDays">How many days do you want to track?</button>
+</div>
+
 <div class="row">      
   <h3 style="text-align: center ">Daily Reports</h3>
     <div class="graph-wrapper">
@@ -27,16 +32,29 @@
     <%= link_to "Export your Diary","/views/reports/export.html.erb" ,{:class=> "btn btn-success "}%>
 </div>
 
-<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7)} %>
+<%= daystotrack = 30 %>
+
+<%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(daystotrack)} %>
 
 
-<%= content_tag :div, :hidden, class: "hide", id: "date_labels", data: {date_labels: Report.last(7).map {|x| x.created_at.strftime('%b %d')}.sort} %>
+<%= content_tag :div, :hidden, class: "hide", id: "date_labels", data: {date_labels: Report.last(daystotrack).map {|x| x.created_at.strftime('%b %d')}.sort} %>
 
 
 <script type="text/javascript">
-
-				
-  var dataset = $(entries).data()["entries"];
+var days=7;
+  function track(){alert(days);}
+  onload=function(){
+	var who=document.getElementsByName('daynum')[0];	
+	days=parseInt(who.value);
+	who.onchange=arguments.callee;
+	document.getElementById('ButtonDays').onclick=track;
+	var dataset = $(entries).data()["entries"];
+  
+  //clean up
+  d3.select("svg")
+       .remove();
+  d3.select("svg")
+       .remove();   
   //show weight
   var weightraw = dataset.map(function(dp){return dp.weight});
   var weight_max = Math.max.apply(Math, weightraw);
@@ -87,7 +105,7 @@
 
   var x = d3.scale.linear()
                   .range([0, w])
-                  .domain([0, 7])
+                  .domain([0, days])
                   .nice();
 
   var y = d3.scale.linear()
@@ -104,10 +122,12 @@
   var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
-                    .ticks(6)
-                    .tickPadding(w/14)
-                    .tickValues([0,1,2,3,4,5,6])
-                    .tickFormat(function(d, i){ return dates[i]}); 
+                    .ticks(days-1)
+                    .tickPadding(w/(days*2))
+                    .tickValues(d3.range(days))
+                    .tickFormat(function(d, i){if (i%(Math.round(days/7))==0) {return dates[i]} } );
+                    //.tickFormat(function(d, i){return dates[i]});
+                    //.tickFormat(function(d, i){ if (days <8) {return dates[i]} else { if (i%(Math.round(days/7))==0) {return dates[i]} } }); 
 
   var yAxis = d3.svg.axis()
                     .scale(y)
@@ -128,12 +148,12 @@
        .enter()
        .append("rect")
        .attr("x", function(d, i) {
-          return  i * (w / dataset  .length);
+          return  i * (w / days);
        })
        .attr("y", function(d) {
           return 0;
        })
-       .attr("width", w / dataset.length - barPadding)
+       .attr("width", w / days - barPadding)
        .attr("height", h)
        .style("fill", function(d) {
           if (d==1||String(d).valueOf() == new String("Yes").valueOf()) {
@@ -151,7 +171,7 @@
       .style("stroke-width", 2)
       .style("stroke", color)
       .style("fill", "none")
-      .attr("transform", "translate(" + w/14 + ",0)");
+      .attr("transform", "translate(" + w/(days*2) + ",0)");
     }
       
   function addCommentCircles(data, color) {
@@ -160,7 +180,7 @@
       .enter()
       .append("circle")
       .attr("id", function(d,i) { return "comment_" + i})
-      .attr("cx", function(d,i) { return x(i)+ w/14 + 3; })
+      .attr("cx", function(d,i) { return x(i)+ w/(days*2) + 3; })
       .attr("cy", function(d)   { return y(0);       })
       .attr("r", 5)
       .attr("comment_on", 0)
@@ -460,6 +480,8 @@ svg.selectAll("path.pointer").data(piedata).enter()
             return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
         }
     });
+    
+}
 /////////////////////////////
 
 
