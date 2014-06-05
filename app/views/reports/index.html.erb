@@ -30,7 +30,7 @@
 <%= content_tag :div, :hidden, class: "hide",  id: "entries", data: {entries: Report.last(7)} %>
 
 
-<%= content_tag :div, :hidden, class: "hide", id: "date_labels", data: {date_labels: Report.last(7).map {|x| x.created_at.strftime('%b %d')}.sort} %>
+<%= content_tag :div, :hidden, class: "hide", id: "date_labels", data: {date_labels: Report.last(7).sort_by { |x| x.created_at }.map {|x| x.created_at.strftime('%b %d')}} %>
 
 
 <script type="text/javascript">
